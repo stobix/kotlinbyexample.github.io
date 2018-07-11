@@ -14,6 +14,15 @@ fun main(args: Array<String>) {
 File("input.txt").let {
     it.exists()                     // 1
 }
+
+var x: Int? = functionThatReturnsIntOrNull()
+x = x ?. let {
+    it + 2 // 2
+} // 3
+
+fun <A,B> applyUnlessNull(a: A?, f: (A) -> B) : B? =
+    a ?. let { f(a) } // 4
+
 //sampleEnd
 }
 ```
@@ -22,4 +31,6 @@ File("input.txt").let {
 
 
 1. file object is now accessible by reference `it`    
-    
+2. `it` is here guaranteed to be an ```Int```, not an ```Int?```
+3. The whole expression evaluates to `x = null` if `x` is `null`, and `x = x+2` otherwise
+4. `f` is only applied to `a` if `a` is not `null`.    
